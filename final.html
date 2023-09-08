@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toll Plaza Software</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="../css/mainStyle.css">
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    
+        th,
+        td {
+            padding: 10px;
+        }
+    </style>
+    
+    <!-- <script src="../html/final.js"></script>
+    <script>
+        const eventMapping = () => {
+            $("div").fadeOut(2000)
+            $("li>a:first").click(() => {
+                $("div").fadeOut(2000)
+                $("div:first").fadeIn(2000)
+                addEntry();
+            });
+
+            $("li>a:eq(1)").click(() => {
+                $("div").fadeOut(1000);
+                $("div:eq(1)").fadeIn(1000);
+                showStatistics();
+            });
+
+            $("li>a:last").click(() => {
+                $("div").fadeOut(1000);
+                $("div:last)").fadeIn(1000);
+                showSearchResults();
+            });
+        }
+        $().ready(() => {
+            eventMapping();
+        })
+
+    </script> -->
+
+</head>
+<body>
+    <h1>Toll Plaza Software</h1>
+    <nav>
+        <ul class="menu">
+            <li><a href="#">Add Entry</a></li>
+            <li><a href="#">Statistics</a></li>
+            <li><a href="#">Search</a></li>
+        </ul>
+
+    </nav>
+
+    <div>
+    <h2>Add Entry</h2>
+    <p>Enter the vehicle number and category and click on the Add button to generate the toll amount.</p>
+    <p>Vehicle: <input type="text" id="vehicle"></p>
+    <p>Category: <select id="category">
+            <option value="">Select</option>
+            <option value="Bikes">Bikes</option>
+            <option value="LMV">LMV</option>
+            <option value="HMV">HMV</option>
+            <option value="Heavy Trucks">Heavy Trucks</option>
+        </select></p>
+    <p><button onclick="addEntry()">Add</button></p>
+    </div>
+
+    <div>
+    <h2>Statistics</h2>
+    <p>View the total amount and count of entries for each category.</p>
+    <div id="statistics"></div>
+    </div>
+    
+    <div>
+    <h2>Search</h2>
+    <p>Filter the entries based on category and vehicle number.</p>
+    <p>Category: <select id="filterCategory" onchange="showSearchResults()">
+            <option value="">All</option>
+            <option value="Bikes">Bikes</option>
+            <option value="LMV">LMV</option>
+            <option value="HMV">HMV</option>
+            <option value="Heavy Trucks">Heavy Trucks</option>
+        </select></p>
+    <p>Vehicle: <input type="text" id="filterVehicle" onkeyup="showSearchResults()"></p>
+    
+    <div id="searchResults"></div>
+    </div>
+    
+    
+</body>
+</html>
