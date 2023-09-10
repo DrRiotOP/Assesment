@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navayuga Toll System</title>
+    <script src="../lib/jquery.min.js"></script>
+    <script src="../html/assesment2.js"></script>
+    <link rel="stylesheet" href="../css/mainStyle.css">
+    <script>
+     
+        const mgrObj = new ExpenseManager();
+        function getRecord(id) {
+            $("div").fadeOut(10);
+            $("div:eq(2)").fadeIn(2000);
+            let record = mgrObj.getAllExpenses().find((e) => e.id == id);
+            if (record != null) {
+                $("#txtId").val(record.id);
+                $("#txtDesc").val(record.detail);
+                document.getElementById("txtDate").valueAsDate = new Date(record.date);
+                $("#txtAmount").val((record.amount));
+                $("#slCategory").val(record.category);
+            }
+        }
+        function populate(records) {
+            $("table").find("tr:gt(0)").remove();
+            for (const rec of records) {
+                const tr = `<tr><td>${rec.id}</td><td>${rec.detail}</td><td>${rec.date}</td><td>${rec.amount}</td><td>${rec.category}</td><td><a href="#" onclick="getRecord(${rec.id})">Edit</td><td><a href="#" onclick="deleteRecord(${rec.id})">Delete</td></tr>`;
+                $("table").append(tr);
+            }
+        }
+        function onAddFeature() {
+            const id = Number($("#txtNewId").val());
+            const detail = $("#txtNewDescription").val();
+            const date = new Date($("#txtNewDate").val());
+            const amount = Number($("#txtNewAmount").val());
+            const category = $("#slNewCategory").val();
+            const expense = new Expense(id, detail, date, amount, category);
+            mgrObj.addNewExpense(expense);
+            alert("Expense added successfully");
+            $("div").fadeOut(1000);
+            $("div:first").fadeIn(200);
+            populate(mgrObj.getAllExpenses());
+        }
+        function onUpdateFeature() {
+            const id = Number($("#txtId").val());
+            const detail = $("#txtDesc").val();
+            const date = new Date($("#txtDate").val());
+            const amount = Number($("#txtAmount").val());
+            const category = $("#slCategory").val();
+            const expense = new Expense(id, detail, date, amount, category);
+            try {
+                mgrObj.updateExpense(id, expense);
+                alert("Expense updated successfully");
+                $("div").fadeOut(2000);
+            } catch (err) {
+                alert(err);
+            }
+            $("div:first").fadeIn(2500);
+            populate(mgrObj.getAllExpenses());
+        }
+        function getExpensesByCategory() {
+            var cats = prompt("Enter the category to search vehical");
+            let records = mgrObj.findExpenseByCategory(cats);
+            populate(records);
+        }
+        function getExpensesByDate() {
+            var datenow = prompt("Enter the date to search");
+            let records = mgrObj.findExpenseByDate(new Date(datenow));
+            populate(records);
+        }
+        const eventMapping = () => {
+            $("div").fadeOut(1);
+            $("li>a:first").click(() => {
+                $("div").fadeOut(1000);
+                $("div:first").fadeIn(1000);
+                populate(mgrObj.getAllExpenses());
+            })
+            $("li>a:eq(1)").click(() => {
+                $("div").fadeOut(1000);
+                $("div:eq(1)").fadeIn(1000);
+            })
+            $("li>a:eq(2)").click(() => {
+                $("div").fadeOut(1000);
+                $("div:first").fadeIn(1000);
+                getExpensesByDate();
+            })
+            $("li>a:eq(3)").click(() => {
+                $("div").fadeOut(1000);
+                $("div:first").fadeIn(1000);
+                getExpensesByCategory();
+            })
+            $("li>a:last").click(() => {
+                $("div").fadeOut(1000);
+                $("div:last").fadeIn(1000);
+            })
+            $("button:first").click(onAddFeature);
+            $("button:eq(1)").click(onUpdateFeature);
+        }
+        $().ready(() => {
+            eventMapping();
+        })
+    </script>
+    <style>
+        li {
+            margin: 15px 0;
+            display: inline;
+        }
+        div {
+            height: 450px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Navayuga Poll System</h1>
+    <hr>
+    <nav>
+        <ul style="list-style-type: none;">
+            <li><a href="#">All Vehicle </a></li>
+            <li><a href="#">Add New Vehicle</a></li>
+            <li><a href="#">Find By Date</a></li>
+            <li><a href="#">Find By Category</a></li>
+            <li><a href="#">About Us</a></li>
+        </ul>
+    </nav>
+    <div>
+        <h2>List Of Vehicle</h2>
+        <table border="1">
+            <tr>
+                <th>Vehicle Reg. No. </th>
+                <th>Vehicle Name</th>
+                <th>Vehicle Date</th>
+                <th>Vehicle Amount</th>
+                <th>Vehicle Category</th>
+                <th>Options</th>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <h2>Add New Expenses</h2>
+        <hr>
+        <section>
+            <p>Enter the Vehicle Registration No. : <input type="text" id="txtNewId"></p>
+            <p>Enter the name: <input type="text" id="txtNewDescription" maxlength="20" minlength="2"></p>
+            <p>Enter the Date: <input type="date" id="txtNewDate"></p>
+            <p>Enter the Amount: <input type="number" id="txtNewAmount"></p>
+            <p>Select the Category:
+                <select id="slNewCategory">
+                    <option value="">Select</option>
+                    <option value="Bikes">Bikes</option>
+                    <option value="LMV">LMV</option>
+                    <option value="HMV">HMV</option>
+                    <option value="Heavy Trucks">Heavy Trucks</option>
+                </select>
+            </p>
+            <p>
+                <button>Add Vehicle to System</button>
+            </p>
+        </section>
+    </div>
+    <div>
+        <h2>Update Vehicle Details</h2>
+        <hr>
+        <section>
+            <p>Enter the Vehicle Registration No. : <input type="text" disabled id="txtId" /></p>
+            <p>Enter the Name of Vehicle: <input type="text" id="txtDesc" maxlength="20" minlength="2" /></p>
+            <p>Enter the Date: <input type="date" id="txtDate" /></p>
+            <p>Enter the Amount: <input type="number" id="txtAmount" /></p>
+            <p>Select the Category:
+                <select id="slCategory">
+                    
+                    <option value="">All</option>
+                    <option value="Bikes">Bikes</option>
+                    <option value="LMV">LMV</option>
+                    <option value="HMV">HMV</option>
+                    <option value="Heavy Trucks">Heavy Trucks</option>
+                </select>
+            </p>
+            <p>
+                <button> Update System</button>
+            </p>
+        </section>
+    </div>
+    <div>
+        <h2>About Us</h2>
+    </div>
+</body>
+</html>
